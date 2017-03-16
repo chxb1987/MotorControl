@@ -482,7 +482,7 @@ int main()
     }
   }
 
-  // Display current MODE on LCD:
+  // Use LCD to display current MODE:
   __builtin_disable_interrupts();
   LCD_Clear();
   LCD_Move(0,0);
