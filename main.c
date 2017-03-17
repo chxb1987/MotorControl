@@ -292,6 +292,9 @@ int main()
       {
         int n = 0;
         setMODE(PWM);
+        LCD_Clear();
+        LCD_Move(0,0);
+        LCD_WriteString("PWM");
         NU32_ReadUART3(buffer, BUF_SIZE);
         sscanf(buffer, "%d", &n);
         if (n<0) {
@@ -352,6 +355,9 @@ int main()
       {
         int i;
         setMODE(ITEST);
+        LCD_Clear();
+        LCD_Move(0,0);
+        LCD_WriteString("ITEST");
         while(getMODE()==2) { // ITEST = 2
           ; // do nothing.
         }
@@ -367,7 +373,6 @@ int main()
       case 'l':                        // go to angle (deg)
       {
         setMODE(IDLE);
-        __builtin_disable_interrupts();
         // encoder_reset();
         // PositionError = 0;
         PositionErrPrev = 0;
@@ -376,6 +381,10 @@ int main()
         CurrentError = 0;
         CurrentErrInt = 0;
         DutyCycle = 0;
+        LCD_Clear();
+        LCD_Move(0,0);
+        LCD_WriteString("HOLD");
+        __builtin_disable_interrupts();
         NU32_ReadUART3(buffer, BUF_SIZE);
         sscanf(buffer, "%d", &PosDeg);
         PosDeg = 10*PosDeg; // 1/10ths of a degree
@@ -425,6 +434,9 @@ int main()
       {
         __builtin_disable_interrupts();
         setMODE(TRACK);
+        LCD_Clear();
+        LCD_Move(0,0);
+        LCD_WriteString("TRACK");
         TRACKcount = 0; // start counting
         PositionErrPrev = 0;
         PositionErrDot = 0;
@@ -456,6 +468,9 @@ int main()
       case 'p':                        // unpower the motor
       {
         setMODE(IDLE);
+        LCD_Clear();
+        LCD_Move(0,0);
+        LCD_WriteString("IDLE");
         DutyCycle = 0;
         PositionErrInt = 0;
         PositionErrPrev = 0;
@@ -472,21 +487,58 @@ int main()
       {
         sprintf(buffer, "%d\r\n", getMODE());
         NU32_WriteUART3(buffer);
+        LCD_Clear();
+        LCD_Move(0,0);
+        switch (getMODE()) {
+          case IDLE:
+          {
+            LCD_WriteString("IDLE");
+            break;
+          }
+          case PWM:
+          {
+            LCD_WriteString("PWM");
+            break;
+          }
+          case ITEST:
+          {
+            LCD_WriteString("ITEST");
+            break;
+          }
+          case HOLD:
+          {
+            LCD_WriteString("HOLD");
+            break;
+          }
+          case TRACK:
+          {
+            LCD_WriteString("TRACK");
+            break;
+          }
+          default:
+          {
+            LCD_WriteString("UNKNOWN MODE");
+            break;
+          }
+        }
         break;
       }
       default:
       {
         NU32_LED2 = 0;  // turn on LED2 to indicate an error
         setMODE(IDLE);
+        LCD_Clear();
+        LCD_Move(0,0);
+        LCD_WriteString("IDLE");
         break;
       }
     }
     // Use LCD to display current MODE:
     // __builtin_disable_interrupts();
-    LCD_Clear();
-    LCD_Move(0,0);
-    sprintf(lcdbuf,"%d",getMODE());
-    LCD_WriteString(lcdbuf);
+    // LCD_Clear();
+    // LCD_Move(0,0);
+    // sprintf(lcdbuf,"%c",getMODE());
+    // LCD_WriteString(lcdbuf);
     // LCD_WriteString("asdf");
     // switch (getMODE()) {
     //   case IDLE:
