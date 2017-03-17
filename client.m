@@ -79,13 +79,13 @@ while ~has_quit
             end
             fprintf('Duty cycle: %d; Direction: %s\n', n(1), dir);
         case 'g'
-            set_c_gains = input('Set current controller Kp and Ki as [Kp Ki]: ');
+            set_c_gains = input('Set current controller Kp and Ki as [Kp Ki] ([10 6.5] is recommended): ');
             fprintf(mySerial,'%f %f\n',set_c_gains);
         case 'h'
             get_c_gains = fscanf(mySerial,'%f %f');
             fprintf(['Current: Kp: ',num2str(get_c_gains(1)),', Ki: ',num2str(get_c_gains(2))]);
         case 'i'
-            set_p_gains = input('Set position controller Kp, Ki, and Kd as [Kp Ki Kd]: ');
+            set_p_gains = input('Set position controller Kp, Ki, and Kd as [Kp Ki Kd] ([5 0.05 100] is recommended): ');
             fprintf(mySerial,'%f %f %f\n',set_p_gains);
         case 'j'
             get_p_gains = fscanf(mySerial,'%f %f');
