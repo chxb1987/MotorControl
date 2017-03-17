@@ -228,6 +228,7 @@ void __ISR(_TIMER_2_VECTOR, IPL5SOFT) CurrentController(void) { // _TIMER_4_VECT
 int main() 
 {
   char buffer[BUF_SIZE];
+  char lcdbuf[16];
   unsigned int adcval = 0;
   float kptemp = 0, kitemp = 0, kdtemp = 0;
   unsigned int duration = 0;
@@ -480,45 +481,47 @@ int main()
         break;
       }
     }
+    // Use LCD to display current MODE:
+    // __builtin_disable_interrupts();
+    LCD_Clear();
+    LCD_Move(0,0);
+    sprintf(lcdbuf,"%d",getMODE());
+    LCD_WriteString(lcdbuf);
+    // LCD_WriteString("asdf");
+    // switch (getMODE()) {
+    //   case IDLE:
+    //   {
+    //     LCD_WriteString("IDLE");
+    //     break;
+    //   }
+    //   case PWM:
+    //   {
+    //     LCD_WriteString("PWM");
+    //     break;
+    //   }
+    //   case ITEST:
+    //   {
+    //     LCD_WriteString("ITEST");
+    //     break;
+    //   }
+    //   case HOLD:
+    //   {
+    //     LCD_WriteString("HOLD");
+    //     break;
+    //   }
+    //   case TRACK:
+    //   {
+    //     LCD_WriteString("TRACK");
+    //     break;
+    //   }
+    //   default:
+    //   {
+    //     LCD_WriteString("UNKNOWN MODE");
+    //     break;
+    //   }
+    // }
+    // __builtin_enable_interrupts();
   }
-
-  // Use LCD to display current MODE:
-  __builtin_disable_interrupts();
-  LCD_Clear();
-  LCD_Move(0,0);
-  switch (getMode()) {
-    case IDLE:
-    {
-      LCD_WriteString("IDLE");
-      break;
-    }
-    case PWM:
-    {
-      LCD_WriteString("PWM");
-      break;
-    }
-    case ITEST:
-    {
-      LCD_WriteString("ITEST");
-      break;
-    }
-    case HOLD:
-    {
-      LCD_WriteString("HOLD");
-      break;
-    }
-    case TRACK:
-    {
-      LCD_WriteString("TRACK");
-      break;
-    }
-    default:
-    {
-      LCD_WriteString("UNKNOWN MODE");
-      break;
-    }
-  }
-  __builtin_enable_interrupts();
 
   return 0;
 }
